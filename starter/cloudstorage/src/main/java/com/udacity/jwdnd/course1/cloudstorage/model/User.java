@@ -64,4 +64,8 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public boolean isValid() {
+        return this.username != null && this.password != null && this.firstName != null && this.lastName != null;
+    }
 }
