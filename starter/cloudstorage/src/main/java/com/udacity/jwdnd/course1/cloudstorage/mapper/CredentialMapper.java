@@ -9,9 +9,15 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface CredentialMapper {
     @Select("SELECT * FROM CREDENTIALS WHERE userid = #{userId}")
-    Credential[] getCredentials(Integer userId);
+    Credential[] readAll(Integer userId);
 
     @Insert("INSERT INTO CREDENTIALS (url, username, key, password, userid) VALUES(#{fileName}, #{contentType}, #{userName}, #{key}, #{userId})")
     @Options(useGeneratedKeys = true, keyProperty = "credentialId")
-    int insert(Credential credential);
+    int create(Credential credential);
+
+    @Select("UPDATE CREDENTIALS SET (url = #{url}, username = #{username}, key = #{key}, password = #{password}) WHERE credentialid = #{credentialid}")
+    int update(Credential credential);
+
+    @Select("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialid}")
+    int delete(Integer credentialId);
 }

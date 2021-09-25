@@ -14,11 +14,11 @@ public class CredentialStorageService {
     }
 
     public Credential[] getCredentials(Integer userId) {
-        return this.credentialMapper.getCredentials(userId);
+        return this.credentialMapper.readAll(userId);
     }
 
     public int saveCredential(Credential credential) {
-        return this.credentialMapper.insert(credential);
+        return this.credentialMapper.create(credential);
     }
 
 }

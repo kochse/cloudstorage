@@ -14,11 +14,11 @@ public class NoteStorageService {
     }
 
     public Note[] getNotes(Integer userId) {
-        return this.noteMapper.getNotes(userId);
+        return this.noteMapper.readAll(userId);
     }
 
     public int saveNote(Note note) {
-        return this.noteMapper.insert(note);
+        return this.noteMapper.create(note);
     }
 
 }

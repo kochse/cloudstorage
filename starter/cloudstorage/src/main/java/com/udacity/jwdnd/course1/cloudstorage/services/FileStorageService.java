@@ -14,14 +14,14 @@ public class FileStorageService {
     }
 
     public boolean isFilenameAvailable(String filename) {
-        return fileMapper.getFile(filename) == null;
+        return fileMapper.read(filename) == null;
     }
 
     public File[] getFiles(Integer userId) {
-        return this.fileMapper.getFiles(userId);
+        return this.fileMapper.readAll(userId);
     }
 
     public int uploadFile(File file) {
-        return this.fileMapper.insert(file);
+        return this.fileMapper.create(file);
     }
 }
