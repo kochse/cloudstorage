@@ -19,8 +19,11 @@ public class SignUpPage {
     @FindBy(name = "password")
     private WebElement password;
 
-    @FindBy(name = "alert")
+    @FindBy(className = "alert-dark")
     private WebElement alertMessage;
+
+    @FindBy(className = "login")
+    private WebElement loginButton;
 
     public SignUpPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -37,6 +40,10 @@ public class SignUpPage {
 
     public String getAlertMessage() {
         return this.alertMessage.getText();
+    }
+
+    public void backToLogin() {
+        this.loginButton.click();
     }
 
 }

@@ -48,15 +48,38 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
+	@Test
+	public void testUnauthorizedAccess() {
+		driver.get("http://localhost:" + this.port + "/");
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		driver.get("http://localhost:" + this.port + "/home");
+		Assertions.assertEquals("Login", driver.getTitle());
+	}
+
 	// Sign Up, Login, Homepage
 	@Test
-	public void testSignUp() throws InterruptedException {
+	public void testSignUpAndLogin() throws InterruptedException {
 		driver.get("http://localhost:" + this.port + "/signup");
 		Assertions.assertEquals("Sign Up", driver.getTitle());
 
 		SignUpPage signup = new SignUpPage(driver);
 		signup.fillAndSubmitForm();
 		Assertions.assertEquals("You successfully signed up! Please continue to the login page.", signup.getAlertMessage());
+
+		signup.backToLogin();
+
+		LoginPage login = new LoginPage(driver);
+		login.loginAndSubmit();
+
+		driver.get("http://localhost:" + this.port + "/home");
+		Assertions.assertEquals("Home", driver.getTitle());
+
+		HomePage home = new HomePage(driver);
+		home.logout();
+
+		driver.get("http://localhost:" + this.port + "/home");
+		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
 	// Note Creation
