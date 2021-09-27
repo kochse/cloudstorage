@@ -24,4 +24,8 @@ public class FileStorageService {
     public int uploadFile(File file) {
         return this.fileMapper.create(file);
     }
+
+    public void deleteFile(Integer fileId) {
+        this.fileMapper.delete(fileId);
+    }
 }

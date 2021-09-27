@@ -19,5 +19,5 @@ public interface CredentialMapper {
     int update(Credential credential);
 
     @Select("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialid}")
-    int delete(Integer credentialId);
+    void delete(Integer credentialId);
 }

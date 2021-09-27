@@ -21,4 +21,7 @@ public class NoteStorageService {
         return this.noteMapper.create(note);
     }
 
+    public void deleteNote(Integer noteId) {
+        this.noteMapper.delete(noteId);
+    }
 }
