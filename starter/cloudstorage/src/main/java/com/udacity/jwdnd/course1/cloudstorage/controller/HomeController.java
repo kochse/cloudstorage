@@ -46,10 +46,7 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(Principal principal, Model model) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
-        // logger.trace("A TRACE Message");
+
         User user = this.userService.getUser(principal.getName());
         model.addAttribute("files", this.fileStorageService.getFiles(user.getUserId()));
         model.addAttribute("notes", this.noteStorageService.getNotes(user.getUserId()));
@@ -60,9 +57,7 @@ public class HomeController {
 
     @PostMapping("/uploadFile")
     public String uploadFile(@RequestParam("file") MultipartFile file, Principal principal, Model model) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
+
         User user = this.userService.getUser(principal.getName());
 
         if (!fileStorageService.isFilenameAvailable(file.getOriginalFilename())) {
@@ -88,14 +83,13 @@ public class HomeController {
     @GetMapping("/deleteFile")
     public String deleteFile(@RequestParam("file") String fileId, Principal principal, Model model) {
         this.fileStorageService.deleteFile(Integer.parseInt(fileId));
+
         return "redirect:/home";
     }
 
     @PostMapping("/saveNote")
     public String addNote(Note note, Principal principal, Model model) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
+
         User user = this.userService.getUser(principal.getName());
 
         this.noteStorageService.saveNote(new Note(note.getNoteId(), note.getNoteTitle(), note.getNoteDescription(), user.getUserId()));
@@ -114,9 +108,7 @@ public class HomeController {
 
     @PostMapping("/saveCredential")
     public String addCredential(Credential credential, Principal principal, Model model) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
+
         User user = this.userService.getUser(principal.getName());
 
         this.credentialStorageService.saveCredential(new Credential(credential.getCredentialId(), credential.getUrl(), credential.getUserName(), credential.getKey(), credential.getPassword(), user.getUserId()));
