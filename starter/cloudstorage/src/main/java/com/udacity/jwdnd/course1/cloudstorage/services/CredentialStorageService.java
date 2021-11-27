@@ -17,8 +17,12 @@ public class CredentialStorageService {
         return this.credentialMapper.readAll(userId);
     }
 
-    public int saveCredential(Credential credential) {
-        return this.credentialMapper.create(credential);
+    public void saveCredential(Credential credential) {
+        if (credential.getCredentialId() != null) {
+            this.credentialMapper.update(credential);
+        } else {
+            this.credentialMapper.create(credential);
+        }
     }
 
     public void deleteCredential(Integer credentialId) {

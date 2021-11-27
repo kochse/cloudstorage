@@ -139,9 +139,7 @@ public class HomeController {
 
     @PostMapping("/saveCredential")
     public String addCredential(Credential credential, Principal principal, Model model) {
-
         User user = this.userService.getUser(principal.getName());
-
         if (user != null) {
             this.credentialStorageService.saveCredential(new Credential(credential.getCredentialId(), credential.getUrl(), credential.getUserName(), credential.getKey(), credential.getPassword(), user.getUserId()));
         }
