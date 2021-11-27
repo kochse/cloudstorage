@@ -84,10 +84,14 @@ public class HomePage {
 
     public void addCredential(String url, String username, String password) {
         this.credentialsTab.click();
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(this.addCredentialButton));
+        this.addCredentialButton.click();
+        wait.until(ExpectedConditions.visibilityOf(this.urlInput));
         this.urlInput.sendKeys(url);
         this.userNameInput.sendKeys(username);
         this.passwordInput.sendKeys(password);
-        this.addCredentialButton.click();
+        this.credentialForm.submit();
     }
 
     public void checkIfCredentialExistsAndPasswordIsEncrypted(String url, String username, String password) {
