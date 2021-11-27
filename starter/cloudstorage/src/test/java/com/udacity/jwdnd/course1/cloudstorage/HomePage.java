@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -71,7 +72,11 @@ public class HomePage {
     }
 
     public void checkIfNoteExists(String title) {
-
+        this.notesTab.click();
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(this.addNoteButton));
+        WebElement note = driver.findElement(By.xpath("//*[text()='" + title + "']"));
+        Assertions.assertEquals(title, note.getText());
     }
 
     public void updateNote(String title) {
@@ -94,8 +99,12 @@ public class HomePage {
         this.credentialForm.submit();
     }
 
-    public void checkIfCredentialExistsAndPasswordIsEncrypted(String url, String username, String password) {
-
+    public void checkIfCredentialExists(String url, String username, String password) {
+        this.credentialsTab.click();
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(this.addCredentialButton));
+        WebElement credential = driver.findElement(By.xpath("//*[text()='" + url + "']"));
+        Assertions.assertEquals(url, credential.getText());
     }
 
     public void deleteCredential(String url) {

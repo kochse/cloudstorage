@@ -17,9 +17,9 @@ public class LoginPage {
         PageFactory.initElements(driver, this);
     }
 
-    public void loginAndSubmit() {
-        username.sendKeys("Test");
-        password.sendKeys("Test");
+    public void loginAndSubmit(String user, String pass) {
+        username.sendKeys(user);
+        password.sendKeys(pass);
 
         username.submit();
     }

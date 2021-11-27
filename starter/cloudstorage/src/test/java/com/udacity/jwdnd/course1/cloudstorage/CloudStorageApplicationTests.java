@@ -61,13 +61,13 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Sign Up", driver.getTitle());
 
 		SignUpPage signup = new SignUpPage(driver);
-		signup.fillAndSubmitForm();
+		signup.fillAndSubmitForm("Test1", "Test1");
 		Assertions.assertEquals("You successfully signed up! Please continue to the login page.", signup.getAlertMessage());
 
 		signup.backToLogin();
 
 		LoginPage login = new LoginPage(driver);
-		login.loginAndSubmit();
+		login.loginAndSubmit("Test1", "Test1");
 
 		driver.get("http://localhost:" + this.port + "/home");
 		Assertions.assertEquals("Home", driver.getTitle());
@@ -87,23 +87,21 @@ class CloudStorageApplicationTests {
 //		}
 		driver.get("http://localhost:" + this.port + "/signup");
 		SignUpPage signup = new SignUpPage(driver);
-		signup.fillAndSubmitForm();
+		signup.fillAndSubmitForm("TestN", "TestN");
 		driver.get("http://localhost:" + this.port + "/login");
 		LoginPage login = new LoginPage(driver);
-		login.loginAndSubmit();
+		login.loginAndSubmit("TestN", "TestN");
 
 		driver.get("http://localhost:" + this.port + "/home");
 		Assertions.assertEquals("Home", driver.getTitle());
 
 		// Create Note
 		HomePage home = new HomePage(driver);
-		home.addNote("Test", "Test");
+		home.addNote("Test Note", "Test");
 
 		// View Note
+		home.checkIfNoteExists("Test Note");
 
-		// Edit Note
-
-		// Delete Note
 
 
 		//driver.get("http://localhost:" + this.port + "/login");
@@ -119,6 +117,12 @@ class CloudStorageApplicationTests {
 	// Credential Creation
 	@Test
 	public void testCredentials() {
+		driver.get("http://localhost:" + this.port + "/signup");
+		SignUpPage signup = new SignUpPage(driver);
+		signup.fillAndSubmitForm("TestC", "TestC");
+		driver.get("http://localhost:" + this.port + "/login");
+		LoginPage login = new LoginPage(driver);
+		login.loginAndSubmit("TestC", "TestC");
 
 		driver.get("http://localhost:" + this.port + "/home");
 		Assertions.assertEquals("Home", driver.getTitle());
@@ -128,10 +132,8 @@ class CloudStorageApplicationTests {
 		home.addCredential("Test", "Test", "Test");
 
 		// View Credential
+		home.checkIfCredentialExists("Test", "Test", "Test");
 
-		// Edit Credential
-
-		// Delete Credential
 
 		driver.get("http://localhost:" + this.port + "/login");
 		Assertions.assertEquals("Login", driver.getTitle());

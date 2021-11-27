@@ -29,11 +29,11 @@ public class SignUpPage {
         PageFactory.initElements(driver, this);
     }
 
-    public void fillAndSubmitForm() {
+    public void fillAndSubmitForm(String user, String pass) {
         firstName.sendKeys("Test");
         lastName.sendKeys("Test");
-        username.sendKeys("Test");
-        password.sendKeys("Test");
+        username.sendKeys(user);
+        password.sendKeys(pass);
 
         firstName.submit();
     }
