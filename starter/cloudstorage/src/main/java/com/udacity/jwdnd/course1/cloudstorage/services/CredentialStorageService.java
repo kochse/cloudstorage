@@ -21,4 +21,7 @@ public class CredentialStorageService {
         return this.credentialMapper.create(credential);
     }
 
+    public void deleteCredential(Integer credentialId) {
+        this.credentialMapper.delete(credentialId);
+    }
 }

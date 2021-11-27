@@ -88,7 +88,7 @@ public class HomeController {
 
         return "redirect:/home";
     }
-
+    
     @GetMapping("/deleteFile/{id}")
     public String deleteFile(@PathVariable Integer id, Principal principal, Model model) {
         this.fileStorageService.deleteFile(id);
@@ -130,6 +130,15 @@ public class HomeController {
         return "redirect:/home";
     }
 
+    @GetMapping("/deleteNote")
+    public String deleteNote(@RequestParam("note") String noteId, Principal principal, Model model) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        this.noteStorageService.deleteNote(Integer.parseInt(noteId));
+        return "redirect:/home";
+    }
+
     @PostMapping("/saveCredential")
     public String addCredential(Credential credential, Principal principal, Model model) {
 
@@ -137,6 +146,15 @@ public class HomeController {
 
         this.credentialStorageService.saveCredential(new Credential(credential.getCredentialId(), credential.getUrl(), credential.getUserName(), credential.getKey(), credential.getPassword(), user.getUserId()));
 
+        return "redirect:/home";
+    }
+
+    @GetMapping("/deleteCredential")
+    public String deleteCredential(@RequestParam("credential") String credentialId, Principal principal, Model model) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        this.credentialStorageService.deleteCredential(Integer.parseInt(credentialId));
         return "redirect:/home";
     }
 }
