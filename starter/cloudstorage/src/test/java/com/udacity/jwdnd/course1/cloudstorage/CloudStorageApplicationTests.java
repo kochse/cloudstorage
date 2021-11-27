@@ -2,14 +2,11 @@ package com.udacity.jwdnd.course1.cloudstorage;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
@@ -82,13 +79,33 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
-	// Note Creation
 	@Test
 	public void testNotes() {
-		List<WebElement> results = driver.findElements(By.cssSelector("div.g a"));
-		for (WebElement element : results) {
-			String link = element.getAttribute("href");
-		}
+//		List<WebElement> results = driver.findElements(By.cssSelector("div.g a"));
+//		for (WebElement element : results) {
+//			String link = element.getAttribute("href");
+//		}
+		driver.get("http://localhost:" + this.port + "/signup");
+		SignUpPage signup = new SignUpPage(driver);
+		signup.fillAndSubmitForm();
+		driver.get("http://localhost:" + this.port + "/login");
+		LoginPage login = new LoginPage(driver);
+		login.loginAndSubmit();
+
+		driver.get("http://localhost:" + this.port + "/home");
+		Assertions.assertEquals("Home", driver.getTitle());
+
+		// Create Note
+		HomePage home = new HomePage(driver);
+		home.addNote("Test", "Test");
+
+		// View Note
+
+		// Edit Note
+
+		// Delete Note
+
+
 		//driver.get("http://localhost:" + this.port + "/login");
 		//Assertions.assertEquals("Login", driver.getTitle());
 
@@ -102,6 +119,20 @@ class CloudStorageApplicationTests {
 	// Credential Creation
 	@Test
 	public void testCredentials() {
+
+		driver.get("http://localhost:" + this.port + "/home");
+		Assertions.assertEquals("Home", driver.getTitle());
+
+		// Create Credential
+		HomePage home = new HomePage(driver);
+		home.addCredential("Test", "Test", "Test");
+
+		// View Credential
+
+		// Edit Credential
+
+		// Delete Credential
+
 		driver.get("http://localhost:" + this.port + "/login");
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
