@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CloudStorageApplication {
 
 	public static void main(String[] args) {
+		System.setProperty("spring.devtools.restart.enabled", "true");
 		SpringApplication.run(CloudStorageApplication.class, args);
 	}
 

@@ -8,16 +8,24 @@ import com.udacity.jwdnd.course1.cloudstorage.services.CredentialStorageService;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileStorageService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteStorageService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -26,8 +34,6 @@ public class HomeController {
     CredentialStorageService credentialStorageService;
     NoteStorageService noteStorageService;
     UserService userService;
-
-    // Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     public HomeController(FileStorageService fileStorageService, CredentialStorageService credentialStorageService, NoteStorageService noteStorageService, UserService userService) {
         this.fileStorageService = fileStorageService;
@@ -48,6 +54,9 @@ public class HomeController {
     public String home(Principal principal, Model model) {
 
         User user = this.userService.getUser(principal.getName());
+        if (user == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("files", this.fileStorageService.getFiles(user.getUserId()));
         model.addAttribute("notes", this.noteStorageService.getNotes(user.getUserId()));
         model.addAttribute("credentials", this.credentialStorageService.getCredentials(user.getUserId()));
@@ -80,10 +89,35 @@ public class HomeController {
         return "redirect:/home";
     }
 
-    @PostMapping("/deleteFile")
-    public String deleteFile(Principal principal, Model model) {
-
+    @GetMapping("/deleteFile/{id}")
+    public String deleteFile(@PathVariable Integer id, Principal principal, Model model) {
+        this.fileStorageService.deleteFile(id);
         return "redirect:/home";
+    }
+
+    @GetMapping("/viewFile/{id}")
+    public ResponseEntity<Resource> viewFile(@PathVariable Integer id, Principal principal, Model model) {
+        User user = this.userService.getUser(principal.getName());
+
+        if (user != null) {
+            ArrayList<File> files = new ArrayList<>(Arrays.asList(this.fileStorageService.getFiles(user.getUserId())));
+            File file = files.stream().filter(a -> a.getFileId() == id).collect(Collectors.toList()).get(0);
+            if (file != null) {
+                byte[] fileData = file.getFileData();
+                ByteArrayResource resource = new ByteArrayResource(fileData);
+
+                HttpHeaders header = new HttpHeaders();
+                header.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\"" + file.getFileName() + "\"");
+
+                return ResponseEntity.ok()
+                        .headers(header)
+                        .contentLength(fileData.length)
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                        .body(resource);
+            }
+        }
+
+        return null;
     }
 
     @PostMapping("/saveNote")
