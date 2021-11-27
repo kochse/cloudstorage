@@ -142,17 +142,19 @@ public class HomeController {
 
         User user = this.userService.getUser(principal.getName());
 
-        this.credentialStorageService.saveCredential(new Credential(credential.getCredentialId(), credential.getUrl(), credential.getUserName(), credential.getKey(), credential.getPassword(), user.getUserId()));
+        if (user != null) {
+            this.credentialStorageService.saveCredential(new Credential(credential.getCredentialId(), credential.getUrl(), credential.getUserName(), credential.getKey(), credential.getPassword(), user.getUserId()));
+        }
 
         return "redirect:/home";
     }
 
-    @GetMapping("/deleteCredential")
-    public String deleteCredential(@RequestParam("credential") String credentialId, Principal principal, Model model) {
+    @GetMapping("/deleteCredential/{id}")
+    public String deleteCredential(@PathVariable Integer id, Principal principal, Model model) {
         if (principal == null) {
             return "redirect:/login";
         }
-        this.credentialStorageService.deleteCredential(Integer.parseInt(credentialId));
+        this.credentialStorageService.deleteCredential(id);
         return "redirect:/home";
     }
 }
