@@ -88,7 +88,7 @@ public class HomeController {
 
         return "redirect:/home";
     }
-    
+
     @GetMapping("/deleteFile/{id}")
     public String deleteFile(@PathVariable Integer id, Principal principal, Model model) {
         this.fileStorageService.deleteFile(id);
@@ -122,20 +122,18 @@ public class HomeController {
 
     @PostMapping("/saveNote")
     public String addNote(Note note, Principal principal, Model model) {
-
         User user = this.userService.getUser(principal.getName());
-
         this.noteStorageService.saveNote(new Note(note.getNoteId(), note.getNoteTitle(), note.getNoteDescription(), user.getUserId()));
 
         return "redirect:/home";
     }
 
-    @GetMapping("/deleteNote")
-    public String deleteNote(@RequestParam("note") String noteId, Principal principal, Model model) {
+    @GetMapping("/deleteNote/{id}")
+    public String deleteNote(@PathVariable Integer id, Principal principal, Model model) {
         if (principal == null) {
             return "redirect:/login";
         }
-        this.noteStorageService.deleteNote(Integer.parseInt(noteId));
+        this.noteStorageService.deleteNote(id);
         return "redirect:/home";
     }
 

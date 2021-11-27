@@ -58,13 +58,8 @@
                                 <tbody>
                                 <tr th:each="file : ${files}">
                                     <td>
-<<<<<<< HEAD
                                         <a th:href="@{/viewFile/{id}(id=${file.getFileId()})}" target="_blank" class="btn btn-success">View</a>
                                         <a th:href="@{/deleteFile/{id}(id=${file.getFileId()})}" class="btn btn-danger">Delete</a>
-=======
-                                        <a target="_blank" class="btn btn-success">View</a>
-                                        <a th:href="@{'/deleteFile?file='} + ${file.getFileId()}" class="btn btn-danger">Delete</a>
->>>>>>> 5426ce8cb0699efa6ef4438c323af342c3cc85f9
                                     </td>
 
                                     <td scope="row" th:text="${file.getFileName()}"></td>
@@ -90,8 +85,8 @@
                                 <tbody>
                                     <tr th:each="note : ${notes}">
                                         <td>
-                                            <button type="button" class="btn btn-success">Edit</button>
-                                            <a class="btn btn-danger">Delete</a>
+                                            <button type="button" class="btn btn-success" th:attr="onclick=|showNoteModal('${note.getNoteId()}', '${note.getNoteTitle()}', '${note.getNoteDescription()}')|">Edit</button>
+                                            <a th:href="@{/deleteNote/{id}(id=${note.getNoteId()})}" class="btn btn-danger">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${note.getNoteTitle()}"></th>
                                         <td th:text="${note.getNoteDescription()}"> </td>

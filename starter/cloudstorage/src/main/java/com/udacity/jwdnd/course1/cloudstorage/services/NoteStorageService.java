@@ -18,8 +18,14 @@ public class NoteStorageService {
     }
 
     public int saveNote(Note note) {
-        return this.noteMapper.create(note);
+        if (note.getNoteId() != null) {
+            return this.noteMapper.update(note);
+        } else {
+            return this.noteMapper.create(note);
+        }
     }
+
+
 
     public void deleteNote(Integer noteId) {
         this.noteMapper.delete(noteId);
