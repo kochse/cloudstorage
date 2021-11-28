@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialStorageService;
+import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,7 @@ public class CredentialController {
         User user = this.userService.getUser(principal.getName());
         if (user != null) {
             this.credentialStorageService.saveCredential(new Credential(credential.getCredentialId(), credential.getUrl(), credential.getUserName(), credential.getKey(), credential.getPassword(), user.getUserId()));
-            redirectAttrs.addFlashAttribute("addCredentialSuccess", true);
+            redirectAttrs.addFlashAttribute("credentialMessage", "Credential added successfully.");
         }
 
         redirectAttrs.addFlashAttribute("selectCredentialsTab", true);
@@ -44,6 +45,7 @@ public class CredentialController {
 
         redirectAttrs.addFlashAttribute("selectCredentialsTab", true);
         this.credentialStorageService.deleteCredential(id);
+        redirectAttrs.addFlashAttribute("credentialMessage", "Credential deleted successfully.");
         return "redirect:/home";
     }
 }

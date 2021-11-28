@@ -31,8 +31,9 @@ public class CredentialStorageService {
         Stream<Credential> credentials = Arrays.stream(this.credentialMapper.readAll(userId));
         return credentials.map(credential -> {
             if (credential.getPassword() != null) {
-                String password = encryptionService.decryptValue(credential.getPassword(), this.encodedKey);
-                credential.setPassword(password);
+                //String password = encryptionService.decryptValue(credential.getPassword(), this.encodedKey);
+                //credential.setPassword(password);
+                credential.setKey(this.encodedKey);
             }
            return credential;
         }).toArray(Credential[]::new);

@@ -27,8 +27,13 @@ public class NoteController {
     @PostMapping("/saveNote")
     public String addNote(Note note, Principal principal, Model model, RedirectAttributes redirectAttrs) {
         User user = this.userService.getUser(principal.getName());
-        this.noteStorageService.saveNote(new Note(note.getNoteId(), note.getNoteTitle(), note.getNoteDescription(), user.getUserId()));
-        redirectAttrs.addFlashAttribute("addNoteSuccess", true);
+        if (note.getNoteDescription().length() > 1000) {
+            redirectAttrs.addFlashAttribute("noteError", "Note can't be saved as description exceed 1000 characters");
+        } else {
+            this.noteStorageService.saveNote(new Note(note.getNoteId(), note.getNoteTitle(), note.getNoteDescription(), user.getUserId()));
+            redirectAttrs.addFlashAttribute("noteMessage", "Note added successfully.");
+        }
+
         redirectAttrs.addFlashAttribute("selectNotesTab", true);
         redirectAttrs.addFlashAttribute("selectFilesTab", false);
         redirectAttrs.addFlashAttribute("selectCredentialsTab", false);
@@ -41,6 +46,7 @@ public class NoteController {
         if (principal == null) {
             return "redirect:/login";
         }
+        redirectAttrs.addFlashAttribute("noteMessage", "Note deleted successfully.");
 
         redirectAttrs.addFlashAttribute("selectNotesTab", true);
         redirectAttrs.addFlashAttribute("selectFilesTab", false);

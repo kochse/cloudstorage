@@ -39,7 +39,9 @@ public class FileController {
 
         User user = this.userService.getUser(principal.getName());
 
-        if (!fileStorageService.isFilenameAvailable(file.getOriginalFilename())) {
+        if (file.getSize() > 5000000) {
+            redirectAttrs.addFlashAttribute("fileError", "file size limit exceeded");
+        } else if (!fileStorageService.isFilenameAvailable(file.getOriginalFilename())) {
             redirectAttrs.addFlashAttribute("filenameNotAvailable", true);
         } else {
             if (!file.isEmpty()) {

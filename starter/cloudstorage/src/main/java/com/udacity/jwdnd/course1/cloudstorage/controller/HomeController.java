@@ -1,10 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.services.CredentialStorageService;
-import com.udacity.jwdnd.course1.cloudstorage.services.FileStorageService;
-import com.udacity.jwdnd.course1.cloudstorage.services.NoteStorageService;
-import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.services.*;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,12 +17,14 @@ public class HomeController {
     CredentialStorageService credentialStorageService;
     NoteStorageService noteStorageService;
     UserService userService;
+    EncryptionService encryptionService;
 
-    public HomeController(FileStorageService fileStorageService, CredentialStorageService credentialStorageService, NoteStorageService noteStorageService, UserService userService) {
+    public HomeController(FileStorageService fileStorageService, CredentialStorageService credentialStorageService, NoteStorageService noteStorageService, UserService userService, EncryptionService encryptionService) {
         this.fileStorageService = fileStorageService;
         this.credentialStorageService = credentialStorageService;
         this.noteStorageService = noteStorageService;
         this.userService = userService;
+        this.encryptionService = encryptionService;
     }
 
     @GetMapping("/")
@@ -48,6 +47,7 @@ public class HomeController {
         model.addAttribute("files", this.fileStorageService.getFiles(user.getUserId()));
         model.addAttribute("notes", this.noteStorageService.getNotes(user.getUserId()));
         model.addAttribute("credentials", this.credentialStorageService.getCredentials(user.getUserId()));
+        model.addAttribute("encryptionService", encryptionService);
 
         Object showNotes = model.asMap().get("selectNotesTab");
         Object showCredentials = model.asMap().get("selectCredentialsTab");

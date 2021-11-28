@@ -31,6 +31,10 @@
                         <div th:if="${uploadFileSuccess}" class="alert alert-dark">
                             Upload success.
                         </div>
+                        <div th:if="${fileError}" class="alert alert-error">
+                            <span th:text="${fileError}"></span>
+                        </div>
+
 
                         <form action="#" th:action="@{'/uploadFile'}" enctype="multipart/form-data" method="POST">
                             <div class="container">
@@ -73,8 +77,12 @@
                             + Add a New Note
                         </button>
 
-                        <div th:if="${addNoteSuccess}" class="alert alert-dark">
-                            Note added successfully.
+                        <div th:if="${noteMessage}" class="alert alert-dark">
+                            <span th:text="${noteMessage}"></span>
+                        </div>
+
+                        <div th:if="${noteError}" class="alert alert-error">
+                            <span th:text="${noteError}"></span>
                         </div>
 
                         <div class="table-responsive">
@@ -135,8 +143,8 @@
                             + Add a New Credential
                         </button>
 
-                        <div th:if="${addCredentialSuccess}" class="alert alert-dark">
-                            Credential added successfully.
+                        <div th:if="${credentialMessage}" class="alert alert-dark">
+                            <span th:text="${credentialMessage}"></span>
                         </div>
 
                         <div class="table-responsive">
@@ -152,7 +160,7 @@
                                 <tbody>
                                 <tr th:each="credential : ${credentials}">
                                     <td>
-                                        <button type="button" class="btn btn-success" th:attr="onclick=|showCredentialModal('${credential.getCredentialId()}', '${credential.getUrl()}', '${credential.getUserName()}', '${credential.getPassword()}')|">Edit</button>
+                                        <button type="button" class="btn btn-success" th:attr="onclick=|showCredentialModal('${credential.getCredentialId()}', '${credential.getUrl()}', '${credential.getUserName()}', '${encryptionService.decryptValue(credential.password, credential.key)}')|">Edit</button>
                                         <a th:href="@{/deleteCredential/{id}(id=${credential.getCredentialId()})}" class="btn btn-danger">Delete</a>
                                     </td>
                                     <th scope="row" th:text="${credential.getUrl()}"></th>
