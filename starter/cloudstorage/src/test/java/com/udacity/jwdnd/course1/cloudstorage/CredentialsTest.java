@@ -1,10 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -38,31 +36,59 @@ public class CredentialsTest {
         Assertions.assertEquals("Home", this.driver.getTitle());
     }
 
-    // Credential Creation
+    @AfterEach
+    public void afterEach() {
+        if (this.driver != null) {
+            driver.quit();
+        }
+    }
+
+
     @Test
-    public void testCredentials() {
-
-
-        // View Credential
+    public void testDeleteCredential() {
         HomePage home = new HomePage(driver);
-        home.checkIfCredentialExists("Test", "Test", "Test");
+        String url = "TestDELETE";
+        home.addCredential(url, "TestUSERNAME", "TestPASSWORD");
+        WebElement urlElement = home.findCredentialByUrl(url);
+        Assertions.assertEquals(url, urlElement.getText());
 
+        home.deleteCredential(url);
+        Assertions.assertEquals(home.checkIfCredentialExists(url), false);
+        home.deleteCredentialIfExist();
+    }
 
-        driver.get("http://localhost:" + this.port + "/login");
-        Assertions.assertEquals("Login", driver.getTitle());
+    @Test
+    public void testEditCredential() {
+        HomePage home = new HomePage(driver);
+        String url = "TestEDIT";
+        home.addCredential(url, "TestUSERNAME2", "TestPASS2");
+
+        WebElement credential = home.findCredentialByUrl(url);
+        Assertions.assertEquals(url, credential.getText());
+
+        String newUrl = "TestCredential2";
+        home.updateFirstCredential(url, newUrl);
+
+        Assertions.assertEquals(home.checkIfCredentialExists(url), false);
+
+        credential = home.findCredentialByUrl(newUrl);
+        Assertions.assertEquals(newUrl, credential.getText());
+
+        home.deleteCredentialIfExist();
     }
 
     @Test
     public void testCreateCredential() {
-        // Create Credential
         HomePage home = new HomePage(driver);
-        home.addCredential("Test", "Test", "Test");
+        String url = "Test";
+        home.addCredential(url, "Test", "Test");
 
-        home = new HomePage(driver);
-        String title = "Test Note";
-        home.addNote(title, "Test");
-        WebElement note = home.findNoteByTitle(title);
-        Assertions.assertEquals(title, note.getText());
-        home.deleteNoteIfExist();
+        WebElement credential = home.findCredentialByUrl(url);
+        Assertions.assertEquals(url, credential.getText());
+
+        WebElement credentialPassword = home.findCredentialPassword();
+        Assertions.assertNotEquals("Test", credentialPassword.getText());
+
+        home.deleteCredentialIfExist();
     }
 }

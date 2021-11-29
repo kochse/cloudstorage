@@ -81,6 +81,22 @@ public class HomePage {
         return note;
     }
 
+    public WebElement findCredentialByUrl(String url) {
+        this.credentialsTab.click();
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(this.addCredentialButton));
+        WebElement note = driver.findElement(By.xpath("//*[text()='" + url + "']"));
+        return note;
+    }
+
+    public WebElement findCredentialPassword() {
+        this.credentialsTab.click();
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(this.addCredentialButton));
+        WebElement password = driver.findElement(By.xpath("//td[@class='password']"));
+        return password;
+    }
+
     public boolean checkIfNoteExists(String title) {
         this.notesTab.click();
         WebDriverWait wait = new WebDriverWait(this.driver,30);
@@ -88,10 +104,24 @@ public class HomePage {
         return !driver.findElements(By.xpath("//*[text()='" + title + "']")).isEmpty();
     }
 
+    public boolean checkIfCredentialExists(String url) {
+        this.credentialsTab.click();
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(this.addCredentialButton));
+        return !driver.findElements(By.xpath("//*[text()='" + url + "']")).isEmpty();
+    }
+
     public boolean checkIfNoteDeleteButtonExists() {
         this.notesTab.click();
         WebDriverWait wait = new WebDriverWait(this.driver,30);
         wait.until(ExpectedConditions.visibilityOf(this.addNoteButton));
+        return !driver.findElements(By.xpath("//a[text()='Delete']")).isEmpty();
+    }
+
+    public boolean checkIfCredentialDeleteButtonExists() {
+        this.credentialsTab.click();
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(this.addCredentialButton));
         return !driver.findElements(By.xpath("//a[text()='Delete']")).isEmpty();
     }
 
@@ -109,12 +139,38 @@ public class HomePage {
         wait.until(ExpectedConditions.visibilityOf(this.addNoteButton));
     }
 
+    public void updateFirstCredential(String url, String newUrl) {
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[text()='" + url + "']"))));
+        WebElement editButton = driver.findElement(By.xpath("//button[text()='Edit']"));
+        editButton.click();
+
+        wait.until(ExpectedConditions.visibilityOf(this.urlInput));
+        this.urlInput.clear();
+        this.urlInput.sendKeys(newUrl);
+        this.credentialForm.submit();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.name("urlInput")));
+        wait.until(ExpectedConditions.visibilityOf(this.addCredentialButton));
+    }
+
     public void deleteNoteIfExist() {
         if (this.checkIfNoteDeleteButtonExists()) {
             WebElement deleteButton = driver.findElement(By.xpath("//a[text()='Delete']"));
             deleteButton.click();
             WebDriverWait wait = new WebDriverWait(this.driver,30);
             wait.until(ExpectedConditions.visibilityOf(this.addNoteButton));
+        }
+    }
+
+    public void deleteCredentialIfExist() {
+        WebDriverWait wait2 = new WebDriverWait(this.driver,30);
+        wait2.until(ExpectedConditions.visibilityOf(this.addCredentialButton));
+
+        if (this.checkIfCredentialDeleteButtonExists()) {
+            WebElement deleteButton = driver.findElement(By.xpath("//a[text()='Delete']"));
+            deleteButton.click();
+            WebDriverWait wait = new WebDriverWait(this.driver,30);
+            wait.until(ExpectedConditions.visibilityOf(this.addCredentialButton));
         }
     }
 
@@ -136,16 +192,12 @@ public class HomePage {
         this.credentialForm.submit();
     }
 
-    public void checkIfCredentialExists(String url, String username, String password) {
-        this.credentialsTab.click();
-        WebDriverWait wait = new WebDriverWait(this.driver,30);
-        wait.until(ExpectedConditions.visibilityOf(this.addCredentialButton));
-        WebElement credential = driver.findElement(By.xpath("//*[text()='" + url + "']"));
-        Assertions.assertEquals(url, credential.getText());
-    }
+
 
     public void deleteCredential(String url) {
-
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[text()='" + url + "']"))));
+        this.deleteCredentialIfExist();
     }
 
 
