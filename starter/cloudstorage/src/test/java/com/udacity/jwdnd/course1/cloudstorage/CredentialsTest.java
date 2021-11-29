@@ -1,7 +1,10 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class NotesTests {
+public class CredentialsTest {
     @LocalServerPort
     private int port;
 
@@ -35,55 +38,31 @@ public class NotesTests {
         Assertions.assertEquals("Home", this.driver.getTitle());
     }
 
-    @AfterEach
-    public void afterEach() {
-        if (this.driver != null) {
-            driver.quit();
-        }
+    // Credential Creation
+    @Test
+    public void testCredentials() {
+
+
+        // View Credential
+        HomePage home = new HomePage(driver);
+        home.checkIfCredentialExists("Test", "Test", "Test");
+
+
+        driver.get("http://localhost:" + this.port + "/login");
+        Assertions.assertEquals("Login", driver.getTitle());
     }
 
     @Test
-    public void testDeleteNote() {
+    public void testCreateCredential() {
+        // Create Credential
         HomePage home = new HomePage(driver);
-        String title = "Test Note";
-        home.addNote(title, "Test");
-        WebElement note = home.findNoteByTitle(title);
-        Assertions.assertEquals(title, note.getText());
-        home.deleteNote(title);
-        Assertions.assertEquals(home.checkIfNoteExists(title), false);
-        home.deleteNoteIfExist();
-    }
+        home.addCredential("Test", "Test", "Test");
 
-    @Test
-    public void testEditNote() {
-        HomePage home = new HomePage(driver);
-        String title = "Test Note";
-        home.addNote(title, "Test");
-        WebElement note = home.findNoteByTitle(title);
-        Assertions.assertEquals(title, note.getText());
-
-        String newTitle = "TestNote2";
-        home.updateFirstNote(title, newTitle);
-
-        Assertions.assertEquals(home.checkIfNoteExists(title), false);
-
-        note = home.findNoteByTitle(newTitle);
-        Assertions.assertEquals(newTitle, note.getText());
-
-        home.deleteNoteIfExist();
-    }
-
-    @Test
-    public void testCreateNote() {
-        HomePage home = new HomePage(driver);
+        home = new HomePage(driver);
         String title = "Test Note";
         home.addNote(title, "Test");
         WebElement note = home.findNoteByTitle(title);
         Assertions.assertEquals(title, note.getText());
         home.deleteNoteIfExist();
     }
-
-
-
-
 }

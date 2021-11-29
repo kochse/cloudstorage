@@ -78,30 +78,4 @@ class CloudStorageApplicationTests {
 		driver.get("http://localhost:" + this.port + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
-
-	// Credential Creation
-	@Test
-	public void testCredentials() {
-		driver.get("http://localhost:" + this.port + "/signup");
-		SignUpPage signup = new SignUpPage(driver);
-		signup.fillAndSubmitForm("TestC", "TestC");
-		driver.get("http://localhost:" + this.port + "/login");
-		LoginPage login = new LoginPage(driver);
-		login.loginAndSubmit("TestC", "TestC");
-
-		driver.get("http://localhost:" + this.port + "/home");
-		Assertions.assertEquals("Home", driver.getTitle());
-
-		// Create Credential
-		HomePage home = new HomePage(driver);
-		home.addCredential("Test", "Test", "Test");
-
-		// View Credential
-		home.checkIfCredentialExists("Test", "Test", "Test");
-
-
-		driver.get("http://localhost:" + this.port + "/login");
-		Assertions.assertEquals("Login", driver.getTitle());
-	}
-
 }
