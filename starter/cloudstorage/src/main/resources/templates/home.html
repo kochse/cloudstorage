@@ -73,10 +73,6 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" th:classappend="${selectNotesTab} ? 'show active' : ''" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                        <button style="margin: 0.25em;" type="button" id="add-note" class="btn btn-info float-right" onclick="showNoteModal()">
-                            + Add a New Note
-                        </button>
-
                         <div th:if="${noteMessage}" class="alert alert-dark">
                             <span th:text="${noteMessage}"></span>
                         </div>
@@ -84,6 +80,12 @@
                         <div th:if="${noteError}" class="alert alert-error">
                             <span th:text="${noteError}"></span>
                         </div>
+
+
+                            <button style="margin: 0.25em;" type="button" id="add-note" class="btn btn-info float-right" onclick="showNoteModal()">
+                                + Add a New Note
+                            </button>
+
 
                         <div class="table-responsive">
                             <table class="table table-striped" id="userTable">
@@ -139,13 +141,17 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" th:classappend="${selectCredentialsTab} ? 'show active' : ''" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
-                        <button style="margin: 0.25em;" type="button" id="add-credential" class="btn btn-info float-right" onclick="showCredentialModal()">
-                            + Add a New Credential
-                        </button>
+
+
+
 
                         <div th:if="${credentialMessage}" class="alert alert-dark">
                             <span th:text="${credentialMessage}"></span>
                         </div>
+
+                        <button style="margin: 0.25em;" type="button" id="add-credential" class="btn btn-info float-right" onclick="showCredentialModal()">
+                            + Add a New Credential
+                        </button>
 
                         <div class="table-responsive">
                             <table class="table table-striped" th:object="${credentials}" id="credentialTable">
