@@ -54,7 +54,6 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
-	// Sign Up, Login, Homepage
 	@Test
 	public void testSignUpAndLogin() throws InterruptedException {
 		driver.get("http://localhost:" + this.port + "/signup");
@@ -62,11 +61,12 @@ class CloudStorageApplicationTests {
 
 		SignUpPage signup = new SignUpPage(driver);
 		signup.fillAndSubmitForm("Test1", "Test1");
-		Assertions.assertEquals("You successfully signed up! Please continue to the login page.", signup.getAlertMessage());
-
-		signup.backToLogin();
+		Assertions.assertEquals("You successfully signed up!", signup.getAlertMessage());
 
 		LoginPage login = new LoginPage(driver);
+		login.waitForLoginPage();
+		Assertions.assertEquals("Login", driver.getTitle());
+
 		login.loginAndSubmit("Test1", "Test1");
 
 		driver.get("http://localhost:" + this.port + "/home");
