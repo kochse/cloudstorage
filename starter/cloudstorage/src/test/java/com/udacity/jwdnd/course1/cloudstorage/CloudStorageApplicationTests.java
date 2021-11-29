@@ -79,41 +79,6 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
-	@Test
-	public void testNotes() {
-//		List<WebElement> results = driver.findElements(By.cssSelector("div.g a"));
-//		for (WebElement element : results) {
-//			String link = element.getAttribute("href");
-//		}
-		driver.get("http://localhost:" + this.port + "/signup");
-		SignUpPage signup = new SignUpPage(driver);
-		signup.fillAndSubmitForm("TestN", "TestN");
-		driver.get("http://localhost:" + this.port + "/login");
-		LoginPage login = new LoginPage(driver);
-		login.loginAndSubmit("TestN", "TestN");
-
-		driver.get("http://localhost:" + this.port + "/home");
-		Assertions.assertEquals("Home", driver.getTitle());
-
-		// Create Note
-		HomePage home = new HomePage(driver);
-		home.addNote("Test Note", "Test");
-
-		// View Note
-		home.checkIfNoteExists("Test Note");
-
-
-
-		//driver.get("http://localhost:" + this.port + "/login");
-		//Assertions.assertEquals("Login", driver.getTitle());
-
-		// driver.findElement(By.name("submit")).click();
-		// driver.findElement(By.className("submit")).click();
-		// driver.findElement(By.tagName("submit")).click();
-		// driver.findElement(By.cssSelector("submit")).click();
-		// driver.findElement(By.xpath("//input[@value='Visit me']")).click();
-	}
-
 	// Credential Creation
 	@Test
 	public void testCredentials() {
