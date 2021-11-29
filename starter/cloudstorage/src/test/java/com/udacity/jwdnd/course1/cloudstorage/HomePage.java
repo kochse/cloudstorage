@@ -9,6 +9,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class HomePage {
 
     private WebDriver driver;
@@ -71,20 +73,55 @@ public class HomePage {
         this.noteForm.submit();
     }
 
-    public void checkIfNoteExists(String title) {
+    public WebElement findNoteByTitle(String title) {
         this.notesTab.click();
         WebDriverWait wait = new WebDriverWait(this.driver,30);
         wait.until(ExpectedConditions.visibilityOf(this.addNoteButton));
         WebElement note = driver.findElement(By.xpath("//*[text()='" + title + "']"));
-        Assertions.assertEquals(title, note.getText());
+        return note;
     }
 
-    public void updateNote(String title) {
+    public boolean checkIfNoteExists(String title) {
+        this.notesTab.click();
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(this.addNoteButton));
+        return !driver.findElements(By.xpath("//*[text()='" + title + "']")).isEmpty();
+    }
 
+    public boolean checkIfNoteDeleteButtonExists() {
+        this.notesTab.click();
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(this.addNoteButton));
+        return !driver.findElements(By.xpath("//a[text()='Delete']")).isEmpty();
+    }
+
+    public void updateFirstNote(String title, String newTitle) {
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[text()='" + title + "']"))));
+        WebElement editButton = driver.findElement(By.xpath("//button[text()='Edit']"));
+        editButton.click();
+
+        wait.until(ExpectedConditions.visibilityOf(this.noteTitle));
+        this.noteTitle.clear();
+        this.noteTitle.sendKeys(newTitle);
+        this.noteForm.submit();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.name("noteTitle")));
+        wait.until(ExpectedConditions.visibilityOf(this.addNoteButton));
+    }
+
+    public void deleteNoteIfExist() {
+        if (this.checkIfNoteDeleteButtonExists()) {
+            WebElement deleteButton = driver.findElement(By.xpath("//a[text()='Delete']"));
+            deleteButton.click();
+            WebDriverWait wait = new WebDriverWait(this.driver,30);
+            wait.until(ExpectedConditions.visibilityOf(this.addNoteButton));
+        }
     }
 
     public void deleteNote(String title) {
-
+        WebDriverWait wait = new WebDriverWait(this.driver,30);
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[text()='" + title + "']"))));
+        this.deleteNoteIfExist();
     }
 
     public void addCredential(String url, String username, String password) {
